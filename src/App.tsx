@@ -1,15 +1,17 @@
-import { Provider } from "./contexts";
-import Principal from "./pages/Principal";
+import styled from "styled-components";
+import Rotas from "./routes";
 
-export default function App() {   
+export default function App() {
   return (
-    <>
-      <Provider>
-        <Principal/>
-      </Provider>
-      
+    <>   
+      <WrapperSld>
+        <Rotas />
+      </WrapperSld>
     </>
-  )
+  );
 }
 
- 
+const WrapperSld = styled.div`
+  display: flex;
+  font-family: "Roboto";
+`;

@@ -1,51 +1,119 @@
-import "./index.css";
 import trevo from "../../assets/trevo-megasena.png";
 import { useLoteria } from "../../hooks";
+import Carregando from "../Carregando";
+import styled, { ThemeProvider } from "styled-components";
 
-export default function Megasena(){
-    const { megasena } = useLoteria();
-    
-    return (
-        <div className="mega-bloco-principal">
+export default function Megasena({ theme }: any) {
+  const { megasena } = useLoteria();
+
+  return (
+    <>
+      <ThemeProvider theme={theme}>
+        {megasena.dataProximoConcurso ? (
+          <WrapperSld>
             <div>
-                <div className="mega-bloco-loteria">
-                    <img src={trevo} alt="" />
-                    <span className="mega-nome-loteria">MEGA-SENA</span>
+              <LoteriaBlockSld>
+                <img src={trevo} alt="" />
+                <LoteriaNameSld>MEGA-SENA</LoteriaNameSld>
+              </LoteriaBlockSld>
+              <LoteriaEstimativaSld>
+                <div>
+                  Estimativa de prêmio do próximo concurso. Sorteio em{" "}
+                  {megasena.dataProximoConcurso}:
                 </div>
-                <div className="mega-bloco-estimativa">
-                    <div className="mega-texto-estimativa"> 
-                        Estimativa de prêmio do próximo concurso. 
-                        Sorteio em {megasena.dataProximoConcurso}:
-                    </div>
-                    <div className="mega-valor-estimativa"> 
-                        {megasena.valorEstimadoProximoConcurso.toLocaleString("pt-Br",{
-                            style: "currency",
-                            currency: "BRL"
-                        })}
-                    </div>
-                </div>
+                <ValorEstimativaSld>
+                  {megasena.valorEstimadoProximoConcurso.toLocaleString(
+                    "pt-Br",
+                    {
+                      style: "currency",
+                      currency: "BRL",
+                    }
+                  )}
+                </ValorEstimativaSld>
+              </LoteriaEstimativaSld>
             </div>
-            <div className="mega-bloco-direita">
-                <div className="mega-linha-bola">
-                    {
-                        megasena.dezenas.map( dezena =>
-                                <div className="mega-bola" key={dezena}>{dezena}</div>
-                             )
-                    }
-                </div>
-                <div className="mega-texto-acumulou">
-                    {
-                        megasena.quantidadeGanhadores === 0 ? 
-                        "ACUMULOU!" :
-                        `${megasena.quantidadeGanhadores} GANHADORES`
-                    }
-                </div>
-                <div className="mega-data-concurso">
-                    {
-                        `Concurso ${megasena.numeroDoConcurso} - ${megasena.dataPorExtenso}`
-                    }
-                </div>
-            </div>
-        </div>
-    );
+            <RightBlockSld>
+              <LineBallSld>
+                {megasena.dezenas.map((dezena) => (
+                  <BallSld key={dezena}>{dezena}</BallSld>
+                ))}
+              </LineBallSld>
+              <TextoAcumulouSld>
+                {megasena.quantidadeGanhadores === 0
+                  ? "ACUMULOU!"
+                  : `${megasena.quantidadeGanhadores} GANHADORES`}
+              </TextoAcumulouSld>
+              <TextoDataConcursoSld>
+                {`Concurso ${megasena.numeroDoConcurso} - ${megasena.dataPorExtenso}`}
+              </TextoDataConcursoSld>
+            </RightBlockSld>
+          </WrapperSld>
+        ) : (
+          <Carregando />
+        )}
+      </ThemeProvider>
+    </>
+  );
 }
+
+const WrapperSld = styled.div`
+  display: flex;
+  padding: 30px 0px;
+  border-bottom: 1px solid #ddd;
+`;
+const LoteriaBlockSld = styled.div`
+  display: flex;
+`;
+
+const LoteriaNameSld = styled.span`
+  font-size: 28px;
+  font-weight: bold;
+  color: ${(props) => props.theme.loteria};
+  margin-left: 10px;
+`;
+
+const LoteriaEstimativaSld = styled.div`
+  width: 240px;
+  margin-left: 45px;
+  margin-top: 15px;
+  font-size: 15px;
+  color: ${(props) => props.theme.estimativa};
+`;
+
+const ValorEstimativaSld = styled.div`
+  font-size: 20px;
+  margin-top: 15px;
+  font-weight: bold;
+  color: ${(props) => props.theme.estimativa};
+`;
+const RightBlockSld = styled.div`
+  margin-left: 50px;
+`;
+
+const LineBallSld = styled.div`
+  display: flex;
+`;
+
+const BallSld = styled.div`
+  font-size: 18px;
+  font-weight: bold;
+  background-color: ${(props) => props.theme.bola};
+  color: ${(props) => props.theme.bolafonte};
+  border-radius: 25px;
+  padding: 10px;
+  margin: 0px 10px;
+`;
+const TextoAcumulouSld = styled.div`
+  font-size: 28px;
+  font-weight: bold;
+  color: ${(props) => props.theme.acumulou};
+  margin-top: 15px;
+  padding-left: 15px;
+`;
+
+const TextoDataConcursoSld = styled.div`
+  margin-top: 15px;
+  color:  ${(props) => props.theme.data};
+  padding-left: 15px;
+  font-size: 15px;
+`;
